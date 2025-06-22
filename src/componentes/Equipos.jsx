@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Pencil, Trash2 } from "lucide-react";
 import { MaterialReactTable } from 'material-react-table';
 import axios from "axios";
+import { API } from '../api'; 
 
 export default function Equipos() {
   const [equipos, setEquipos] = useState([]);
@@ -18,9 +19,9 @@ export default function Equipos() {
       setIsLoading(true);
 
       const [resEquipos, resAreas, resProyectos] = await Promise.all([
-        axios.get("http://localhost:3000/api/equipos"),
-        axios.get("http://localhost:3000/api/areas"),
-        axios.get("http://localhost:3000/api/proyectos"),
+        axios.get(`${API}/api/equipos`),
+        axios.get(`${API}/api/areas`),
+        axios.get(`${API}/api/proyectos`),
       ]);
 
       setAreas(resAreas.data);
@@ -51,7 +52,7 @@ export default function Equipos() {
       proyecto: Number(values.proyecto),
     };
     try {
-      await axios.post("http://localhost:3000/api/equipos", datos);
+      await axios.post(`${API}/api/equipos`, datos);
       fetchEquipos();
     } catch (error) {
       console.error("Error al crear equipo", error);
@@ -66,7 +67,7 @@ export default function Equipos() {
         area: Number(values.area),
         proyecto: Number(values.proyecto),
       };
-      await axios.put(`http://localhost:3000/api/equipos/${id}`, datos);
+      await axios.put(`${API}/api/equipos/${id}`, datos);
       fetchEquipos();
     } catch (error) {
       console.error("Error al actualizar equipo", error);
@@ -75,7 +76,7 @@ export default function Equipos() {
 
   const handleDelete = async (row) => {
     try {
-      await axios.delete(`http://localhost:3000/api/equipos/${row.original.id}`);
+      await axios.delete(`${API}/api/equipos/${row.original.id}`);
       fetchEquipos();
     } catch (error) {
       console.error("Error al eliminar equipo", error);

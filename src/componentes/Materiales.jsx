@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Pencil, Trash2 } from "lucide-react";
 import { MaterialReactTable } from "material-react-table";
 import axios from "axios";
+import { API } from '../api'; 
 
 export default function Materiales() {
     const [materiales, setMateriales] = useState([]);
@@ -17,8 +18,8 @@ export default function Materiales() {
         try {
             setIsLoading(true);
             const [resMateriales, resAreas] = await Promise.all([
-                axios.get("http://localhost:3000/api/materiales"),
-                axios.get("http://localhost:3000/api/areas"),
+                axios.get(`${API}/api/materiales`),
+                axios.get(`${API}/api/areas`),
             ]);
 
             setAreas(resAreas.data);
@@ -40,7 +41,7 @@ export default function Materiales() {
     };
     const fetchAreas = async () => {
         try {
-            const res = await axios.get("http://localhost:3000/api/areas");
+            const res = await axios.get(`${API}/api/areas`);
             setAreas(res.data);
         } catch (error) {
             console.error("Error al cargar áreas", error);
@@ -53,7 +54,7 @@ export default function Materiales() {
             area: Number(values.area),
         };
         try {
-            await axios.post("http://localhost:3000/api/materiales", datos);
+            await axios.post(`${API}/api/materiales`, datos);
             fetchMateriales();
         } catch (error) {
             console.error("Error al crear material", error);
@@ -67,7 +68,7 @@ export default function Materiales() {
                 ...values,
                 area: Number(values.area),
             };
-            await axios.put(`http://localhost:3000/api/materiales/${id}`, datos);
+            await axios.put(`${API}/api/materiales/${id}`, datos);
             fetchMateriales();
         } catch (error) {
             console.error("Error al actualizar material", error);
@@ -76,7 +77,7 @@ export default function Materiales() {
 
     const handleDelete = async (row) => {
         try {
-            await axios.delete(`http://localhost:3000/api/materiales/${row.original.id}`);
+            await axios.delete(`${API}/api/materiales/${row.original.id}`);
             fetchMateriales();
         } catch (error) {
             console.error("Error al eliminar material", error);

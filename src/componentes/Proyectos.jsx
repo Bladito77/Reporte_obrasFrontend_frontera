@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Pencil, Trash2 } from "lucide-react";
 import { MaterialReactTable } from 'material-react-table';
 import axios from "axios";
+import { API } from '../api'; 
 
 export default function Proyectos() {
   const [proyectos, setProyectos] = useState([]);
@@ -14,7 +15,7 @@ export default function Proyectos() {
   const fetchProyectos = async () => {
     try {
       setIsLoading(true);
-      const res = await axios.get("http://localhost:3000/api/proyectos");
+      const res = await axios.get(`${API}/api/proyectos`);
       setProyectos(res.data);
     } catch (error) {
       console.error("Error al cargar proyectos", error);
@@ -25,7 +26,7 @@ export default function Proyectos() {
 
   const handleCreate = async ({ values }) => {
     try {
-      await axios.post("http://localhost:3000/api/proyectos", values);
+      await axios.post(`${API}/api/proyectos`, values);
       fetchProyectos();
     } catch (error) {
       console.error("Error al crear proyecto", error);
@@ -35,7 +36,7 @@ export default function Proyectos() {
   const handleUpdate = async ({ values, row }) => {
     try {
       const id = values.id || row?.original?.id;
-      await axios.put(`http://localhost:3000/api/proyectos/${id}`, values);
+      await axios.put(`${API}/api/proyectos/${id}`, values);
       fetchProyectos();
     } catch (error) {
       console.error("Error al actualizar proyecto", error);
@@ -44,7 +45,7 @@ export default function Proyectos() {
 
   const handleDelete = async (row) => {
     try {
-      await axios.delete(`http://localhost:3000/api/proyectos/${row.original.id}`);
+      await axios.delete(`${API}/api/proyectos/${row.original.id}`);
       fetchProyectos();
     } catch (error) {
       console.error("Error al eliminar proyecto", error);

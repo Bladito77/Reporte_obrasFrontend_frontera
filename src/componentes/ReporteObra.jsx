@@ -6,6 +6,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { PlusCircle, Trash2 } from 'lucide-react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { API } from '../api'; 
 
 import {
     Select,
@@ -34,7 +35,7 @@ export default function ReporteObra({ irAInicio }) {
     const [empleados, setEmpleados] = useState([{ nombre: '', cedula: '', horas: '' }]);
 
     useEffect(() => {
-        axios.get("http://localhost:3000/api/empleados")
+        axios.get(`${API}/api/empleados`)
             .then(res => setEmpleadosOptions(res.data))
             .catch(err => console.error("Error cargando empleados", err));
     }, []);
@@ -88,7 +89,7 @@ export default function ReporteObra({ irAInicio }) {
     const [actividadOptions, setActividadOptions] = useState([]);
 
     useEffect(() => {
-        axios.get("http://localhost:3000/api/actividades")
+        axios.get(`${API}/api/actividades`)
             .then(res => setActividadOptions(res.data))
             .catch(err => console.error("Error cargando descripciones de actividad", err));
     }, []);
@@ -96,7 +97,7 @@ export default function ReporteObra({ irAInicio }) {
     useEffect(() => {
         //console.log("🔎 Equipos antes de enviar:", equipos);
         // Carga los nombres de equipos desde la BD
-        axios.get("http://localhost:3000/api/equipos")
+        axios.get(`${API}/api/equipos`)
             .then(res => setEquiposOptions(res.data))
             .catch(err => console.error("Error cargando equipos", err));
     }, []);
@@ -116,7 +117,7 @@ export default function ReporteObra({ irAInicio }) {
         setEquipos(equipos.filter(eq => eq.id !== id));
     };
     useEffect(() => {
-        axios.get("http://localhost:3000/api/materiales")
+        axios.get(`${API}/api/materiales`)
             .then(res => setMaterialesOptions(res.data))
             .catch(err => console.error("Error cargando materiales", err));
     }, []);
@@ -143,11 +144,11 @@ export default function ReporteObra({ irAInicio }) {
     const [areas, setAreas] = useState([]);
     const [proyectos, setProyectos] = useState([]);
     useEffect(() => {
-        axios.get("http://localhost:3000/api/areas")
+        axios.get(`${API}/api/areas`)
             .then(res => setAreas(res.data))
             .catch(err => console.error("Error cargando áreas", err));
 
-        axios.get("http://localhost:3000/api/proyectos")
+        axios.get(`${API}/api/proyectos`)
             .then(res => setProyectos(res.data))
             .catch(err => console.error("Error cargando proyectos", err));
     }, []);
@@ -231,7 +232,7 @@ export default function ReporteObra({ irAInicio }) {
                 actividades_futuras: actividadesFuturas.filter(act => act.id_descr_acti && act.cantidad).map(({ id, ...rest }) => rest)
             };
 
-            const res = await axios.post("http://localhost:3000/api/reportes", payload);
+            const res = await axios.post(`${API}/api/reportes`, payload);
             const nuevoId = res.data.id;
             setUltimoIdReporte(nuevoId);
             //console.log("🧾 ID recibido en el frontend:", nuevoId);
@@ -259,7 +260,7 @@ export default function ReporteObra({ irAInicio }) {
 
     const generarPDF = async (id, callbackAfterDownload) => {
         try {
-            const response = await fetch(`http://localhost:3000/api/reportes/pdf/${id}`);
+            const response = await fetch(`${API}/api/reportes/pdf/${id}`);
             if (!response.ok) {
                 throw new Error("Error al generar el PDF");
             }
@@ -285,25 +286,6 @@ export default function ReporteObra({ irAInicio }) {
         }
     };
 
-
-
-    // const generarPDF = async (id) => {
-    //     console.log("📤 Generando PDF con ID:", id); // debe imprimir un número válido
-    //     try {
-    //         const response = await fetch(`http://localhost:3000/api/reportes/pdf/${id}`);
-    //         if (!response.ok) {
-    //             throw new Error("Error al generar el PDF");
-    //         }
-
-    //         const blob = await response.blob();
-    //         const url = window.URL.createObjectURL(blob);
-    //         window.open(url, "_blank");
-
-    //     } catch (error) {
-    //         console.error("Error al generar el PDF", error);
-    //         alert("❌ No se pudo generar el PDF");
-    //     }
-    // };
     return (
         <>
             {/* Fragmento del encabezado... */}

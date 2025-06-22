@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import backgroundImage from "../img/imageninicio.png"; // Importa la imagen de fondo
-
+import { API } from "../api";
 
 export default function Login() {
   const navigate = useNavigate(); // Hook para la navegación
@@ -16,7 +16,8 @@ export default function Login() {
     event.preventDefault();
 
     try {
-      const url = process.env.REACT_APP_API_BACK + "/api/login";
+      //const url = process.env.REACT_APP_API_BACK + "/api/login";
+      const url = `${API}/api/login`;
       const response = await axios.post(url, {
         Email: Email,
         Password: Password

@@ -2,6 +2,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Pencil, Trash2 } from "lucide-react";
 import { MaterialReactTable } from 'material-react-table';
 import axios from "axios";
+import { API, apiFetch } from '../api'; // ← si api.js está en la raíz
+
 
 export default function Empleados() {
   const [empleados, setEmpleados] = useState([]);
@@ -10,16 +12,16 @@ export default function Empleados() {
   const [areas, setAreas] = useState([]);
 
   useEffect(() => {
-    fetchData();
+    apiFetchData();
   }, []);
 
-  const fetchData = async () => {
+  const apiFetchData = async () => {
     try {
       setIsLoading(true);
       const [resEmpleados, resCargos, resAreas] = await Promise.all([
-        axios.get("http://localhost:3000/api/empleados"),
-        axios.get("http://localhost:3000/api/cargos"),
-        axios.get("http://localhost:3000/api/areas"),
+        axios.get(`${API}/api/empleados`),
+        axios.get(`${API}/api/cargos`),
+        axios.get(`${API}/api/areas`),
       ]);
 
       setCargos(resCargos.data);
@@ -54,8 +56,8 @@ export default function Empleados() {
       area: areaObj?.id || values.area,
     };
     try {
-      await axios.post("http://localhost:3000/api/empleados", datos);
-      fetchData();
+      await axios.post(`${API}/api/empleados`, datos);
+      apiFetchData();
     } catch (error) {
       console.error("Error al crear empleado", error);
     }
@@ -72,8 +74,8 @@ export default function Empleados() {
         area: areas.find(a => a.area_ === values.areaTexto || a.id === values.area)?.id ?? values.area,
       };
 
-      await axios.put(`http://localhost:3000/api/empleados/${id}`, datos);
-      fetchData();
+      await axios.put(`${API}/api/empleados/${id}`, datos);
+      apiFetchData();
     } catch (error) {
       console.error("🛑 Error al actualizar empleado:", error.response?.data || error.message);
     }
@@ -81,8 +83,8 @@ export default function Empleados() {
 
   const handleDelete = async (row) => {
     try {
-      await axios.delete(`http://localhost:3000/api/empleados/${row.original.id}`);
-      fetchData();
+      await axios.delete(`${API}/api/empleados/${row.original.id}`);
+      apiFetchData();
     } catch (error) {
       console.error("Error al eliminar empleado", error);
     }

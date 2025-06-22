@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Pencil, Trash2 } from "lucide-react";
 import { MaterialReactTable } from "material-react-table";
 import axios from "axios";
-
+import { API } from '../api'; 
 export default function Cargos() {
   const [cargos, setCargos] = useState([]);
   const [areas, setAreas] = useState([]);
@@ -17,9 +17,9 @@ export default function Cargos() {
     try {
       setIsLoading(true);
       const [resCargos, resAreas, resProyectos] = await Promise.all([
-        axios.get("http://localhost:3000/api/cargos"),
-        axios.get("http://localhost:3000/api/areas"),
-        axios.get("http://localhost:3000/api/proyectos"),
+        axios.get(`${API}/api/cargos`),
+        axios.get(`${API}/api/areas`),
+        axios.get(`${API}/api/proyectos`),
       ]);
 
       setAreas(resAreas.data);
@@ -54,7 +54,7 @@ export default function Cargos() {
     };
 
     try {
-      await axios.post("http://localhost:3000/api/cargos", datos);
+      await axios.post(`${API}/api/cargos`, datos);
       fetchAll();
     } catch (error) {
       console.error("Error al crear cargo", error);
@@ -71,7 +71,7 @@ export default function Cargos() {
     };
 
     try {
-      await axios.put(`http://localhost:3000/api/cargos/${id}`, datos);
+      await axios.put(`${API}/api/cargos/${id}`, datos);
       fetchAll();
     } catch (error) {
       console.error("Error al actualizar cargo", error);
@@ -80,7 +80,7 @@ export default function Cargos() {
 
   const handleDelete = async (row) => {
     try {
-      await axios.delete(`http://localhost:3000/api/cargos/${row.original.id}`);
+      await axios.delete(`${API}/api/cargos/${row.original.id}`);
       fetchAll();
     } catch (error) {
       console.error("Error al eliminar cargo", error);

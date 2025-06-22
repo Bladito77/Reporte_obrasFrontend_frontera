@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { API } from '../api'; 
 import {
   BarChart,
   Bar,
@@ -17,7 +18,7 @@ export default function DashboardGraficas() {
   useEffect(() => {
     const obtenerDatos = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/empleados");
+        const res = await axios.get(`${API}/api/empleados`);
         const empleados = res.data;
 
         // Agrupar por área

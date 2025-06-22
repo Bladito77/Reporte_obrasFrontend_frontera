@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Pencil, Trash2 } from "lucide-react";
 import { MaterialReactTable } from 'material-react-table';
 import axios from "axios";
+import { API } from '../api'; 
 
 export default function Areas() {
   const [areas, setAreas] = useState([]);
@@ -14,7 +15,7 @@ export default function Areas() {
   const fetchAreas = async () => {
     try {
       setIsLoading(true);
-      const res = await axios.get("http://localhost:3000/api/areas");
+      const res = await axios.get(`${API}/api/areas`);
       setAreas(res.data);
     } catch (error) {
       console.error("Error al cargar áreas", error);
@@ -25,7 +26,7 @@ export default function Areas() {
 
   const handleCreate = async ({ values }) => {
     try {
-      await axios.post("http://localhost:3000/api/areas", values);
+      await axios.post(`${API}/api/areas`, values);
       fetchAreas();
     } catch (error) {
       console.error("Error al crear área", error);
@@ -35,7 +36,7 @@ export default function Areas() {
   const handleUpdate = async ({ values, row }) => {
     try {
       const id = values.id || row.original.id;
-      await axios.put(`http://localhost:3000/api/areas/${id}`, values);
+      await axios.put(`${API}/api/areas/${id}`, values);
       fetchAreas();
     } catch (error) {
       console.error("Error al actualizar área", error);
@@ -44,7 +45,7 @@ export default function Areas() {
 
   const handleDelete = async (row) => {
     try {
-      await axios.delete(`http://localhost:3000/api/areas/${row.original.id}`);
+      await axios.delete(`${API}/api/areas/${row.original.id}`);
       fetchAreas();
     } catch (error) {
       console.error("Error al eliminar área", error);

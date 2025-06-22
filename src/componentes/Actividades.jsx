@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Pencil, Trash2 } from "lucide-react";
 import { MaterialReactTable } from 'material-react-table';
 import axios from "axios";
+import { API } from "../api"; // ← usamos tu archivo api.js
 
 export default function Actividades() {
   const [actividades, setActividades] = useState([]);
@@ -17,9 +18,9 @@ export default function Actividades() {
     setIsLoading(true);
     try {
       const [resAct, resAreas, resProy] = await Promise.all([
-        axios.get("http://localhost:3000/api/actividades"),
-        axios.get("http://localhost:3000/api/areas"),
-        axios.get("http://localhost:3000/api/proyectos"),
+        axios.get(`${API}/api/actividades`),
+        axios.get(`${API}/api/areas`),
+        axios.get(`${API}/api/proyectos`),
       ]);
 
       setAreas(resAreas.data);
@@ -50,7 +51,7 @@ export default function Actividades() {
       proyecto: proyectos.find(p => p.proyectos === values.proyectoTexto)?.id || values.proyectoTexto,
     };
     try {
-      await axios.post("http://localhost:3000/api/actividades", datos);
+      await axios.post(`${API}/api/actividades`, datos);
       fetchAll();
     } catch (error) {
       console.error("Error creando actividad", error);
@@ -65,7 +66,7 @@ export default function Actividades() {
       proyecto: proyectos.find(p => p.proyectos === values.proyectoTexto)?.id || values.proyectoTexto,
     };
     try {
-      await axios.put(`http://localhost:3000/api/actividades/${id}`, datos);
+      await axios.put(`${API}/api/actividades/${id}`, datos);
       fetchAll();
     } catch (error) {
       console.error("Error actualizando actividad", error);
@@ -74,7 +75,7 @@ export default function Actividades() {
 
   const handleDelete = async (row) => {
     try {
-      await axios.delete(`http://localhost:3000/api/actividades/${row.original.id}`);
+      await axios.delete(`${API}/api/actividades/${row.original.id}`);
       fetchAll();
     } catch (error) {
       console.error("Error eliminando actividad", error);
